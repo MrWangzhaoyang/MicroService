@@ -1,0 +1,55 @@
+{
+  "ReRoutes": [
+    {
+      "DownstreamPathTemplate": "/api/{path}", //下游请求地址模板
+      "DownstreamScheme": "http", //请求协议，目前应该是支持http和https
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "127.0.0.1",
+          "Port": 5100
+        },
+        {
+          "Host": "127.0.0.1",
+          "Port": 5200
+        },
+        {
+          "Host": "127.0.0.1",
+          "Port": 5300
+        }
+      ],
+      "UpstreamPathTemplate": "/MyserviceA/{path}", //请求路径模板
+      "UpstreamHttpMethod": [ //请求方法数组
+        "Get",
+        "Post"
+      ],
+      "LoadBalancerOption": {
+        "Type": "RoundRobin" //轮训
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/{path}", //下游请求地址模板
+      "DownstreamScheme": "http", //请求协议，目前应该是支持http和https
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5400
+        },
+        {
+          "Host": "localhost",
+          "Port": 5500
+        }
+      ],
+      "UpstreamPathTemplate": "/MyserviceB/{path}", //请求路径模板
+      "UpstreamHttpMethod": [ //请求方法数组
+        "Get",
+        "Post"
+      ],
+      "LoadBalancerOption": {
+        "Type": "RoundRobin" //轮训
+      }
+    }
+  ],
+  "GlobalConfiguration": {
+    "ReRouteIsCaseSensitive": false
+  }
+}

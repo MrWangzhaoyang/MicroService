@@ -1,0 +1,26 @@
+{
+  "ReRoutes": [
+    {
+      "ServiceName": "MyServiceA",
+      "DownstreamPathTemplate": "/api/{path}", //下游请求地址模板
+      "DownstreamScheme": "http", //请求协议，目前应该是支持http和https
+      "UpstreamPathTemplate": "/a/{path}", //请求路径模板
+      "UpstreamHttpMethod": [ //请求方法数组
+        "Get",
+        "Post"
+      ],
+      "LoadBalancerOption": {
+        "Type": "RoundRobin" //轮训
+      },
+      "UseServiceDiscovery": true
+    }
+  ],
+  "GlobalConfiguration": {
+    "ReRouteIsCaseSensitive": false,
+    "ServiceDiscoveryProvider": {
+      "Host": "127.0.0.1",
+      "Port": 8500,
+      "Type": "Consul"
+    }
+  }
+}

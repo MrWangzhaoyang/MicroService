@@ -1,0 +1,57 @@
+{
+  "ReRoutes": [
+    {
+      // /*官方文档ReRoutes全节点示例*/
+      // Upstream表示上游请求，即客户端请求到API Gateway的请求
+      "UpstreamPathTemplate": "/", //请求路径模板
+      "UpstreamHttpMethod": [ //请求方法数组
+        "Get"
+      ],
+      //Downstreamb表示下游请求，即API Gateway转发的目标服务地址
+      "DownstreamScheme": "http", //请求协议，目前应该是支持http和https
+      "DownstreamHost": "localhost", //请求服务地址，应该是可以是IP及域名
+      "DownstreamPort": 51779, //端口号
+      "DownstreamPathTemplate": "/", //下游请求地址模板
+      "RouteClaimsRequirement": { //标记该路由是否需要认证
+        "UserType": "registered" //示例,K/V形式，授权声明，授权token中会包含一些claim，如填写则会判断是否和token中的一致，不一致则不准访问
+      },
+      //以下三个是将access claims转为用户的Header Claims,QueryString，该功能只有认证后可用
+      "AddHeadersToRequest": { //
+        "UserType": "Claims[sub] > value[0] > |", //示例
+        "UserId": "Claims[sub] > value[1] > |" //示例
+      },
+      "AddClaimsToRequest": {},
+      "AddQueriesToRequest": {},
+      "RequestIdKey": "", //设置客户端的请求标识key，此key在请求header中，会转发到下游请求中
+      "FileCacheOptions": { //缓存设置
+        "TtlSeconds": 15, //ttl秒被设置为15，这意味着缓存将在15秒后过期。
+        "Region": "" //缓存region，可以使用administrator API清除
+      },
+      "ReRouteIsCaseSensitive": false, //路由是否匹配大小写
+      "ServiceName": "", //服务名称，服务发现时必填
+      "QoSOptions": { //断路器配置,目前Ocelot使用的Polly
+        "ExceptionsAllowedBeforeBreaking": 0, //打开断路器之前允许的例外数量。
+        "DurationOfBreak": 0, //断路器复位之前，打开的时间(毫秒)
+        "TimeoutValue": 0 //请求超时时间(毫秒)
+      },
+      "LoadBalancer": "", //负载均衡 RoundRobin(轮询)/LeastConnection(最少连接数)
+      "RateLimitOptions": { //限流
+        "ClientWhitelist": [],//白名单
+        "EnableRateLimiting": true,
+        "Period": "5m",
+        "PeriodTimespan": 5,//多少秒之后可以重试
+        "Limit": 5//统计时间段最高请求数量
+      },
+      "AuthenticationOptions": { //认证配置
+        "AuthenticationProviderKey": "", //这个key对应的是代码中.AddJWTBreark中的Key
+        "AllowedScopes": [] //使用范围
+      },
+      "HttpHandlerOptions": {
+        "AllowAutoRedirect": true, //指示请求是否应该遵循重定向响应。 如果请求应该自动遵循来自Downstream资源的重定向响应，则将其设置为true; 否则为假。 默认值是true。
+        "UseCookieContainer": true //该值指示处理程序是否使用CookieContainer属性来存储服务器Cookie，并在发送请求时使用这些Cookie。 默认值是true。
+      },
+      "UseServiceDiscovery": false //使用服务发现，目前Ocelot只支持Consul的服务发现
+    }
+  ],
+  "GlobalConfiguration": {}
+}
